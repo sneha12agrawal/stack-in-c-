@@ -1,0 +1,43 @@
+#include <iostream>
+#include <stack>
+using namespace std;
+
+void solve(stack<int>& inputstack, int count, int size) {
+    if (count == (size / 2)) {
+        inputstack.pop();
+        return;
+    }
+    int num = inputstack.top();
+    inputstack.pop();
+    solve(inputstack, count + 1, size);
+    inputstack.push(num);
+}
+
+int main() {
+    int size;
+    cout << "Enter the size: ";
+    cin >> size;
+    
+    stack<int> inputstack;
+    cout << "Enter the values of the array: ";
+    for (int i = 0; i < size; i++) {
+        int value;
+        cin >> value;
+        inputstack.push(value);
+    }
+    
+    solve(inputstack, 0, size);
+
+    // Print the remaining elements in the stack after solving
+    while (!inputstack.empty()) {
+        cout << inputstack.top() << " ";
+        inputstack.pop();
+    }
+    cout << endl;
+
+    return 0;
+}
+
+
+
+
