@@ -1,0 +1,98 @@
+#include <iostream>
+#include <vector>
+#include <stack>
+#include <climits> // Needed for INT_MIN
+using namespace std;
+bool knows(vector<vector<int>>&m,int a,int b,int n)
+{
+    if(m[a][b]==1)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+int celebriaty(vector<vector<int>>&m,int n)
+{
+    stack<int>s;
+    for(int i=0;i<n;i++)
+    {
+        s.push(i);
+        while(s.size()>1)
+        {
+            int a=s.top();
+            s.pop();
+            int b=s.top();
+            s.pop();
+            if(knows(m,a,b,n))
+            {
+                s.push(b);
+            }
+            else
+            
+            {
+                s.push(a);
+            }
+        }
+    }
+    int candidate=s.top();
+    bool rowcheck=false;
+    int rowcount=0;
+    for(int i=0;i<n;i++)
+    {
+        if(m[candidate][i]==0)
+        {
+            rowcount++;
+        }
+    }
+    if(rowcount==n)
+    {
+        rowcheck=true;
+    }
+     bool columncheck=false;
+    int columncount=0;
+    for(int i=0;i<n;i++)
+    {
+        if(m[i][candidate]==1)
+        {
+            columncount++;
+        }
+    }
+    if(columncount==n-1)
+    {
+        columncheck=true;
+    }
+    if(rowcheck==true&&columncheck==true)
+    {
+        return candidate;
+    }
+    else
+    {
+        return -1;
+    }
+} 
+int main()
+{
+    // Example adjacency matrix representing relationships
+    vector<vector<int>>m = {
+        {0, 1, 0},
+        { 0, 0, 0},
+        {0, 1, 0},
+    };
+    
+    int n = m.size();
+    
+    // Find the celebrity
+    int celebrity = celebriaty(m, n);
+    
+    // Output the result
+    if (celebrity != -1) {
+        cout << "The celebrity is person " << celebrity << endl;
+    } else {
+        cout << "No celebrity found" << endl;
+    }
+
+    return 0;
+}
