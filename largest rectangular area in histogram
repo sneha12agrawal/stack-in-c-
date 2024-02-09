@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+#include <stack>
+#include <climits> // Needed for INT_MIN
+using namespace std;
+vector<int> nextsmallerelement(vector<int> arr, int n) {
+    stack<int> s;
+    s.push(-1);
+    vector<int> ans(n); // Fixed initialization of ans vector
+    for (int i=n-1;i>=0;i--) {
+        int curr = arr[i];
+        while (!s.empty() && arr[s.top()] >= curr) { // Corrected condition in while loop
+            s.pop();
+        }
+        ans[i] = s.top(); // Storing the next smaller element
+        s.push(i);
+    }
+    return ans;
+}
+
+vector<int> prevsmallerelement(vector<int> arr, int n) {
+    stack<int> s;
+    s.push(-1);
+    vector<int> ans(n); // Fixed initialization of ans vector
+    for (int i=0;i<n;i++) {
+        int curr = arr[i];
+        while (!s.empty() && arr[s.top()] >= curr) { // Corrected condition in while loop
+            s.pop();
+        }
+        ans[i] = s.top(); // Storing the next smaller element
+        s.push(i);
+    }
+    return ans;
+}
+
+int largestarea(vector<int>& heights) {
+    int n = heights.size();
+    vector<int> next(n);
+    next = nextsmallerelement(heights, n);
+    vector<int> prev(n);
+    prev = prevsmallerelement(heights, n);
+    int area = INT_MIN;
+    for(int i = 0; i < n; i++) {
+        int l = heights[i];
+        int b = next[i] - prev[i] - 1;
+        if(next[i] == -1) {
+            next[i] = n;
+        }
+        int newarea = l * b;
+        area = max(area, newarea);
+    }
+    return area;
+}
+
+int main() {
+    // Example usage of the functions
+    vector<int> heights = {2,1,5,6,2,3}; // Example heights array
+
+    // Calculate the largest area of a histogram
+    int largest_area = largestarea(heights);
+
+    // Output the result
+    cout << "Largest area of histogram: " << largest_area << endl;
+
+    return 0;
+}
+
